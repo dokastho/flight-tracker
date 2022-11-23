@@ -4,7 +4,7 @@ import hashlib
 import sqlite3
 import uuid
 import pathlib
-import app_rename_me
+import flightsite
 import flask
 
 
@@ -24,7 +24,7 @@ def get_db():
     https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
     """
     if 'sqlite_db' not in flask.g:
-        db_filename = app_rename_me.app.config['DATABASE_FILENAME']
+        db_filename = flightsite.app.config['DATABASE_FILENAME']
         flask.g.sqlite_db = sqlite3.connect(str(db_filename))
         flask.g.sqlite_db.row_factory = dict_factory
         # Foreign keys have to be enabled per-connection.  This is an sqlite3
@@ -33,7 +33,7 @@ def get_db():
     return flask.g.sqlite_db
 
 
-@app_rename_me.app.teardown_appcontext
+@flightsite.app.teardown_appcontext
 def close_db(error):
     """Close the database at the end of a request.
 
@@ -152,7 +152,7 @@ def check_authorization(username=None, password=None):
 
 def show_username() -> dict:
     """Handle the rendering of the username/sign in link."""
-    logname = app_rename_me.model.get_logname()
+    logname = flightsite.model.get_logname()
     context = {}
     if not logname:
         context["logname"] = "Sign In"

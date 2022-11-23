@@ -4,17 +4,17 @@ import hashlib
 import os
 import arrow
 from flask import abort, redirect, render_template, request, session
-import app_rename_me
+import flightsite
 
 
-@app_rename_me.app.route('/accounts/', methods=['POST'])
+@flightsite.app.route('/accounts/', methods=['POST'])
 def accounts():
     """/accounts/?target=URL Immediate redirect. No screenshot."""
-    with app_rename_me.app.app_context():
-        connection = app_rename_me.model.get_db()
+    with flightsite.app.app_context():
+        connection = flightsite.model.get_db()
 
         # check if target is unspecified or blank
-        target = app_rename_me.model.get_target()
+        target = flightsite.model.get_target()
 
         # get operation
         operation = request.form.get('operation')
@@ -70,7 +70,7 @@ def accounts():
 
 def do_login(uname, pword):
     """Login user with username and password."""
-    logname = app_rename_me.model.check_authorization(uname, pword)
+    logname = flightsite.model.check_authorization(uname, pword)
     if not logname:
         abort(403)
 
@@ -152,7 +152,7 @@ def do_update_password(connection, info):
     salt = old_pw_hash['password'].split("$")
     if len(salt) > 1:
         salt = salt[1]
-        pw_str = app_rename_me.model.encrypt(salt, info['old'])
+        pw_str = flightsite.model.encrypt(salt, info['old'])
     else:
         pw_str = info['old']
 
@@ -180,10 +180,10 @@ def do_update_password(connection, info):
     user = cur.fetchall()
 
 
-@app_rename_me.app.route('/accounts/login/')
+@flightsite.app.route('/accounts/login/')
 def login():
     """Render login page."""
-    with app_rename_me.app.app_context():
+    with flightsite.app.app_context():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
@@ -194,21 +194,21 @@ def login():
         return redirect('/')
 
 
-@app_rename_me.app.route('/accounts/logout/', methods=['POST'])
+@flightsite.app.route('/accounts/logout/', methods=['POST'])
 def logout():
     """Log out user and redirects to login."""
     session.clear()
     return redirect('/')
 
 
-@app_rename_me.app.route('/accounts/create/', methods=['GET'])
+@flightsite.app.route('/accounts/create/', methods=['GET'])
 def create():
     """Render create page if not logged in."""
 
     return render_template('create.html')
 
 
-@app_rename_me.app.route('/accounts/delete/')
+@flightsite.app.route('/accounts/delete/')
 def delete():
     """Render delete page if logged in."""
     if 'logname' not in session:
@@ -220,7 +220,7 @@ def delete():
     return render_template('delete.html', **context)
 
 
-@app_rename_me.app.route('/accounts/password/')
+@flightsite.app.route('/accounts/password/')
 def password():
     """Render page to update password if logged in."""
     if 'logname' not in session:
