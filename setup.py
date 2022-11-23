@@ -1,5 +1,5 @@
 """
-Personal website  python package configuration.
+Personal website flightsite python package configuration.
 """
 
 from setuptools import setup
@@ -8,13 +8,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='',
+    name='flightsite',
     version='0.1.0',
-    packages=[''],
+    packages=['flightsite'],
     author="Thomas Dokas",
     author_email="dokastho@umich.edu",
-    url="https://github.com/dokastho/",
-    description="A fresh take on what a  can do",
+    url="https://github.com/dokastho/flight-tracker",
+    description="A fresh take on what a flight tracking site can do",
     long_description=long_description,
     long_description_content_type="text/markdown",
     include_package_data=True,
